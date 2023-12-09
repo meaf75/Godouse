@@ -1,0 +1,16 @@
+{
+	"tasks": [
+		{
+			"label": "Build gdextensions windows",
+			"type": "shell",
+			"command": "scons platform=windows",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build gdextensions android",
+			"type": "shell",
+			"command": "scons platform=android",
+			"problemMatcher": []
+		}
+	]
+}

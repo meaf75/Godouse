@@ -1,0 +1,27 @@
+# Godot 4+ specific ignores
+.godot/
+*.obj
+*.os
+
+.import/
+*.import
+export.cfg
+export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+#Android build ignore
+android/build/*
+!android/build/AndroidManifest.xml
+
+# gdextensions
+bin/*
+!bin/godouse.gdextension
+
+# custom
+*~
+.sconsign.dblite
+Godouse.apk.idsig
+
+*.apk

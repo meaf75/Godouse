@@ -1,0 +1,8 @@
+class_name GConstants
+
+const DEFAULT_HOST : String = "192.168.0.1"
+const DEFAULT_PORT : int = 32075
+
+const TCP_MESSAGE_TYPE_MOVE_CURSOR = 0
+const TCP_MESSAGE_TYPE_PRESS_CURSOR_BUTTON = 1
+const TCP_MESSAGE_TYPE_VIRTUAL_KEY = 2
