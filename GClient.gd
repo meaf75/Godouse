@@ -45,6 +45,7 @@ func _process(delta):
 	
 	if was_connected && client.get_status() != StreamPeerTCP.STATUS_CONNECTED:
 		on_update_connection_status.emit(StreamPeerTCP.STATUS_ERROR)
+		client.disconnect_from_host()
 		was_connected = false
 
 func send_cursor_movement(velocity: Vector2, relative: Vector2):

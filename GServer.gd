@@ -50,8 +50,7 @@ func handle_action(action: Dictionary):
 		GConstants.TCP_MESSAGE_TYPE_MOVE_CURSOR:
 			# Move cursor
 			#var next_position = DisplayServer.mouse_get_position() as Vector2 + (offset * _master.move_multiplier)
-			var next_position = DisplayServer.mouse_get_position() as Vector2 + action["velocity"]
-			next_position = DisplayServer.mouse_get_position() as Vector2 + action["relative"] * 4
+			var next_position = GXInput.get_cursor_position() + action["relative"] * 4
 
 			if not _master.initialize_client:
 				GXInput.set_cursor_position(next_position)

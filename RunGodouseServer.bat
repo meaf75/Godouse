@@ -1,0 +1,1 @@
+Godot_v4.2-stable_win64.exe -Path "%cd%" --headless
