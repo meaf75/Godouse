@@ -16,11 +16,21 @@ env = SConscript("godot-cpp/SConstruct")
 project_name = "godouse"
 gd_extensions_folder = "godouse-cpp-gdextensions"
 
-env.Append(CPPPATH=["{}/".format(gd_extensions_folder)])
+is_desktop = env["platform"] == "macos" or env["platform"] == "windows" or env["platform"] == "linux"
+
+env.Append(CPPPATH=[
+    "{}/".format(gd_extensions_folder)    
+])
+
 
 # Add files to include in the compilation
 sources : list[str] = Glob("{}/*.cpp".format(gd_extensions_folder))
 sources.append(Glob("{}/XInputSimulator/*.cpp".format(gd_extensions_folder)))
+
+if is_desktop:
+    env["CPPPATH"].append("{}/traypp/include/".format(gd_extensions_folder))
+    sources.append(Glob("{}/traypp/src/**/*.cpp".format(gd_extensions_folder)))
+    sources.append(Glob("{}/traypp/src/**/**/*.cpp".format(gd_extensions_folder)))
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
@@ -31,12 +41,13 @@ if env["platform"] == "macos":
     )
 elif env["platform"] == "windows":
     # Include windows library
-    env.Append(LIBS=["User32"])
+    env.Append(LIBS=["User32","Shell32"])
     library = env.SharedLibrary(
         "bin/{}{}{}".format(project_name,env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 elif env["platform"] == "android":
+    env.Append(CPPDEFINES=["__EXCLUDE_TRAY_SYSTEM__"])
     lib_name = "lib_{}".format(project_name)
     library = env.SharedLibrary(
         "bin/{}{}{}".format(lib_name,env["suffix"], env["SHLIBSUFFIX"]),

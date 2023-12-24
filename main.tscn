@@ -345,6 +345,8 @@ script = ExtResource("4_ye5hg")
 visible = false
 position = Vector2(184, 323)
 
+[node name="GXTraypp" type="GXTraypp" parent="."]
+
 [connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerHeader/ButtonConfig" to="UIMainPanel" method="_open_config_panel"]
 [connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons/ButtonBackwards" to="UIMainPanel" method="_on_button_backwards_pressed"]
 [connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons/ButtonPlayPause" to="UIMainPanel" method="_on_button_play_pause_pressed"]

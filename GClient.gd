@@ -37,7 +37,7 @@ func try_connect_client(host: String, port: int) -> String:
 	on_update_connection_status.emit(StreamPeerTCP.STATUS_ERROR)
 	return "error connecting client\n%s:%d\nerror code: %d" % [host,port,err]
 
-func _process(delta):
+func _process(_delta):
 	if client == null:
 		return
 
