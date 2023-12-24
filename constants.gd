@@ -1,6 +1,6 @@
 class_name GConstants
 
-const DEFAULT_HOST : String = "192.168.0.1"
+const DEFAULT_HOST : String = "192.168.20.22"
 const DEFAULT_PORT : int = 32075
 
 const TCP_MESSAGE_TYPE_MOVE_CURSOR = 0

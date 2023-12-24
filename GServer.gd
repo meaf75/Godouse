@@ -4,6 +4,7 @@ class_name GServer
 
 var server : TCPServer
 var clients : Array[StreamPeerTCP] = []
+var clients_disconnected : Array[StreamPeerTCP] = []
 
 var _master : GMaster
 
@@ -20,7 +21,7 @@ func initialize(master: GMaster):
 
 	print("Godouse server started at port: ", GConfig.port)
 
-func _process(delta):
+func _process(_delta):
 	
 	if server == null:
 		return
@@ -28,18 +29,29 @@ func _process(delta):
 	if server.is_connection_available():
 		print("new client connected")
 		clients.append(server.take_connection())
-		
+
 	for c in clients:
-		
 		c.poll()
 		
-		if c.get_status() != StreamPeerTCP.STATUS_CONNECTED:
+		# Check if disconnected
+		var conn_status = c.get_status();
+		if conn_status != StreamPeerTCP.STATUS_CONNECTED:
+			if conn_status == StreamPeerTCP.STATUS_NONE:
+				clients_disconnected.append(c)
 			continue
-		
+
 		if c.get_available_bytes() == 0:
 			continue
 
 		handle_action(c.get_var())
+
+	if clients_disconnected.size() > 0:
+		for c in clients_disconnected:
+			clients.erase(c)
+			print("Client disconnected")
+
+		clients_disconnected.clear()
+
 
 func handle_action(action: Dictionary):	
 	if not action.has("type"):

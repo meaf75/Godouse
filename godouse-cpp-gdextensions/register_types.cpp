@@ -2,6 +2,7 @@
 
 #include "gdexample.h"
 #include "gxinput.h"
+#include "gxtraypp.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -17,6 +18,7 @@ void initialize_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<GDExample>();
     ClassDB::register_class<GXInput>();
+    ClassDB::register_class<GXTraypp>();
 }
 
 void uninitialize_module(ModuleInitializationLevel p_level) {

@@ -3,6 +3,7 @@
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/godot-cpp/**",
         "${workspaceFolder}/godouse-cpp-gdextensions/*",
+        "${workspaceFolder}/godouse-cpp-gdextensions/**",
     ],
     "files.associations": {
         "*.env": "properties",
@@ -78,6 +79,7 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "*.rh": "cpp"
     }
 }
