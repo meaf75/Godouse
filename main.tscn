@@ -1,12 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://b7pop0kujhfu1"]
+[gd_scene load_steps=14 format=3 uid="uid://b7pop0kujhfu1"]
 
-[ext_resource type="Script" path="res://GMaster.gd" id="1_1sjy8"]
-[ext_resource type="Script" path="res://GUIMainPanel.gd" id="2_d7m8l"]
+[ext_resource type="Script" uid="uid://ba2e6rto2wglc" path="res://scripts/GMaster.gd" id="1_1sjy8"]
+[ext_resource type="Script" uid="uid://deolmhkst5vs0" path="res://scripts/GUIMainPanel.gd" id="2_d7m8l"]
 [ext_resource type="Texture2D" uid="uid://jbyu6l2u8fwj" path="res://icon.svg" id="2_equil"]
-[ext_resource type="Script" path="res://GServer.gd" id="3_81mp0"]
+[ext_resource type="Script" uid="uid://d2yxw3kimnuu7" path="res://scripts/GServer.gd" id="3_81mp0"]
+[ext_resource type="Script" uid="uid://cpde4t5o1disk" path="res://scripts/safe_area.gd" id="3_kek77"]
 [ext_resource type="Texture2D" uid="uid://cr04cp7p2vhia" path="res://images/fast-backward-button.png" id="3_xf2u2"]
 [ext_resource type="Texture2D" uid="uid://cwsllqbc0wtxu" path="res://images/pause-play.png" id="4_trjos"]
-[ext_resource type="Script" path="res://GClient.gd" id="4_ye5hg"]
+[ext_resource type="Script" uid="uid://dj8nungafkpgn" path="res://scripts/GClient.gd" id="4_ye5hg"]
 [ext_resource type="Texture2D" uid="uid://7kylbsqdfhld" path="res://images/fast-forward-button.png" id="5_3b8wx"]
 
 [sub_resource type="Animation" id="Animation_242bi"]
@@ -30,40 +31,55 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_whjdg"]
 _data = {
-"RESET": SubResource("Animation_242bi"),
-"show_simulator_debug_text": SubResource("Animation_puqbo")
+&"RESET": SubResource("Animation_242bi"),
+&"show_simulator_debug_text": SubResource("Animation_puqbo")
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6w1g4"]
 bg_color = Color(0, 0, 0, 0.823529)
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" node_paths=PackedStringArray("label_simulation_action")]
 process_mode = 3
 script = ExtResource("1_1sjy8")
+label_simulation_action = NodePath("UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction")
 
-[node name="UIMainPanel" type="CanvasLayer" parent="."]
+[node name="UIMainPanel" type="CanvasLayer" parent="." node_paths=PackedStringArray("texture_cursor_simulator", "label_simulation_action", "label_simulation_action_animator", "label_status", "panel_config", "config_label_status", "config_label_result", "input_host", "input_port", "input_cursor_speed")]
 script = ExtResource("2_d7m8l")
+texture_cursor_simulator = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator")
+label_simulation_action = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction")
+label_simulation_action_animator = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction/AnimationPlayer")
+label_status = NodePath("SafeArea/MarginContainer/Control/HBoxContainerHeader/RichTextLabelStatus")
+panel_config = NodePath("SafeArea/UIPanelConfig")
+config_label_status = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/RichTextLabelStatus")
+config_label_result = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LabelResult")
+input_host = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LineEditHost")
+input_port = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LineEditPort")
+input_cursor_speed = NodePath("SafeArea/UIPanelConfig/ControlContainer/OptionsContainer/Title/LineEditCursorSpeed")
 
-[node name="MarginContainer" type="MarginContainer" parent="UIMainPanel"]
+[node name="SafeArea" type="MarginContainer" parent="UIMainPanel"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_kek77")
+
+[node name="MarginContainer" type="MarginContainer" parent="UIMainPanel/SafeArea"]
+layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="Control" type="VBoxContainer" parent="UIMainPanel/MarginContainer"]
+[node name="Control" type="VBoxContainer" parent="UIMainPanel/SafeArea/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainerHeader" type="HBoxContainer" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HBoxContainerHeader" type="HBoxContainer" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 
-[node name="RichTextLabelStatus" type="RichTextLabel" parent="UIMainPanel/MarginContainer/Control/HBoxContainerHeader"]
+[node name="RichTextLabelStatus" type="RichTextLabel" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/normal_font_size = 23
@@ -72,21 +88,21 @@ text = "Status: [color=gray]Unknown[/color]"
 scroll_active = false
 shortcut_keys_enabled = false
 
-[node name="ButtonConfig" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerHeader"]
+[node name="ButtonConfig" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerHeader"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_font_sizes/font_size = 26
 text = " Open config "
 
-[node name="HSeparator2" type="HSeparator" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HSeparator2" type="HSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="HBoxContainerMediaButtons" type="HBoxContainer" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HBoxContainerMediaButtons" type="HBoxContainer" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 
-[node name="ButtonBackwards" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons"]
+[node name="ButtonBackwards" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -94,11 +110,11 @@ icon = ExtResource("3_xf2u2")
 icon_alignment = 1
 expand_icon = true
 
-[node name="VSeparator" type="VSeparator" parent="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons"]
+[node name="VSeparator" type="VSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonPlayPause" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons"]
+[node name="ButtonPlayPause" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -106,11 +122,11 @@ icon = ExtResource("4_trjos")
 icon_alignment = 1
 expand_icon = true
 
-[node name="VSeparator2" type="VSeparator" parent="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons"]
+[node name="VSeparator2" type="VSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonForward" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons"]
+[node name="ButtonForward" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -118,15 +134,15 @@ icon = ExtResource("5_3b8wx")
 icon_alignment = 1
 expand_icon = true
 
-[node name="HSeparator" type="HSeparator" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HSeparator" type="HSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 
-[node name="PanelTouchPad" type="Button" parent="UIMainPanel/MarginContainer/Control"]
+[node name="PanelTouchPad" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
 
-[node name="TextureRectCursorSimulator" type="TextureRect" parent="UIMainPanel/MarginContainer/Control/PanelTouchPad"]
+[node name="TextureRectCursorSimulator" type="TextureRect" parent="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -143,7 +159,7 @@ mouse_filter = 2
 texture = ExtResource("2_equil")
 expand_mode = 1
 
-[node name="LabelSimulationAction" type="Label" parent="UIMainPanel/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator"]
+[node name="LabelSimulationAction" type="Label" parent="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator"]
 self_modulate = Color(1, 1, 1, 0.5)
 layout_mode = 1
 anchors_preset = 7
@@ -161,44 +177,40 @@ theme_override_font_sizes/font_size = 41
 text = "left click"
 horizontal_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UIMainPanel/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction"]
 libraries = {
-"": SubResource("AnimationLibrary_whjdg")
+&"": SubResource("AnimationLibrary_whjdg")
 }
 
-[node name="HSeparator3" type="HSeparator" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HSeparator3" type="HSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 
-[node name="HBoxContainerButtons" type="HBoxContainer" parent="UIMainPanel/MarginContainer/Control"]
+[node name="HBoxContainerButtons" type="HBoxContainer" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="ButtonLeftClick" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerButtons"]
+[node name="ButtonLeftClick" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 
-[node name="VSeparator" type="VSeparator" parent="UIMainPanel/MarginContainer/Control/HBoxContainerButtons"]
+[node name="VSeparator" type="VSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerButtons"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonRightClick" type="Button" parent="UIMainPanel/MarginContainer/Control/HBoxContainerButtons"]
+[node name="ButtonRightClick" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 
-[node name="UIPanelConfig" type="Panel" parent="UIMainPanel"]
+[node name="UIPanelConfig" type="Panel" parent="UIMainPanel/SafeArea"]
 visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_6w1g4")
 
-[node name="ButtonClose" type="Button" parent="UIMainPanel/UIPanelConfig"]
+[node name="ButtonClose" type="Button" parent="UIMainPanel/SafeArea/UIPanelConfig"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -211,7 +223,7 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 25
 text = " Close "
 
-[node name="ControlContainer" type="Control" parent="UIMainPanel/UIPanelConfig"]
+[node name="ControlContainer" type="Control" parent="UIMainPanel/SafeArea/UIPanelConfig"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -224,116 +236,190 @@ offset_bottom = 162.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LabelHost" type="Label" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="ConnectionContainer" type="Control" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -129.5
-offset_top = -67.5
-offset_right = -40.5
-offset_bottom = -44.5
+offset_left = -183.0
+offset_top = -304.0
+offset_right = 182.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabelStatus" type="RichTextLabel" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -119.5
+offset_top = 6.0
+offset_right = 220.5
+offset_bottom = 65.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Status: [color=gray]Unknown[/color]"
+scroll_active = false
+
+[node name="LabelHost" type="Label" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = -112.5
+offset_right = -55.0
+offset_bottom = -89.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Host:"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LabelPort" type="Label" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="LabelPort" type="Label" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -92.5
-offset_top = -24.5
-offset_right = -38.5
-offset_bottom = -1.5
+offset_left = -107.0
+offset_top = -69.5
+offset_right = -53.0
+offset_bottom = -46.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Port:"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LineEditHost" type="LineEdit" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="LineEditHost" type="LineEdit" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -27.5
-offset_top = -74.5
-offset_right = 130.5
-offset_bottom = -39.5
+offset_left = -42.0
+offset_top = -119.5
+offset_right = 116.0
+offset_bottom = -84.5
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "Your host"
 virtual_keyboard_type = 3
 
-[node name="LineEditPort" type="LineEdit" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="LineEditPort" type="LineEdit" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -27.5
-offset_top = -31.5
-offset_right = 130.5
-offset_bottom = 3.5
+offset_left = -42.0
+offset_top = -76.5
+offset_right = 116.0
+offset_bottom = -41.5
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "The port"
 virtual_keyboard_type = 2
 
-[node name="ButtonConnect" type="Button" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="ButtonConnect" type="Button" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -35.5
-offset_top = 26.5
-offset_right = 36.5
-offset_bottom = 57.5
+offset_left = -50.0
+offset_top = -18.5
+offset_right = 22.0
+offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Connect"
 
-[node name="LabelResult" type="Label" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="LabelResult" type="Label" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -146.5
-offset_top = 76.5
-offset_right = 154.5
-offset_bottom = 183.5
+offset_left = -158.5
+offset_top = 19.0
+offset_right = 142.5
+offset_bottom = 126.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "henlux, this is the result of the connect"
 
-[node name="RichTextLabelStatus" type="RichTextLabel" parent="UIMainPanel/UIPanelConfig/ControlContainer"]
+[node name="OptionsContainer" type="Control" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = 33.0
+offset_right = 182.0
+offset_bottom = 319.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/OptionsContainer"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -105.0
-offset_top = 20.0
-offset_right = 235.0
-offset_bottom = 79.0
+offset_left = -68.0
+offset_right = 68.0
+offset_bottom = 46.0
 grow_horizontal = 2
-theme_override_font_sizes/normal_font_size = 30
-bbcode_enabled = true
-text = "Status: [color=gray]Unknown[/color]"
-scroll_active = false
+theme_override_font_sizes/font_size = 36
+text = "Options"
+horizontal_alignment = 1
+
+[node name="LabelCursorSpeed" type="Label" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/OptionsContainer/Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = 40.0
+offset_right = -47.0
+offset_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Cursor speed:"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LineEditCursorSpeed" type="LineEdit" parent="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/OptionsContainer/Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = 33.0
+offset_right = 124.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Cursor speed"
+virtual_keyboard_type = 3
 
 [node name="Server" type="Node" parent="."]
 script = ExtResource("3_81mp0")
@@ -345,19 +431,20 @@ script = ExtResource("4_ye5hg")
 visible = false
 position = Vector2(184, 323)
 
-[node name="GXTraypp" type="GXTraypp" parent="."]
-
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerHeader/ButtonConfig" to="UIMainPanel" method="_open_config_panel"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons/ButtonBackwards" to="UIMainPanel" method="_on_button_backwards_pressed"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons/ButtonPlayPause" to="UIMainPanel" method="_on_button_play_pause_pressed"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerMediaButtons/ButtonForward" to="UIMainPanel" method="_on_button_forward_pressed"]
-[connection signal="button_down" from="UIMainPanel/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_down"]
-[connection signal="button_up" from="UIMainPanel/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
-[connection signal="focus_exited" from="UIMainPanel/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
-[connection signal="mouse_exited" from="UIMainPanel/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_button_left_click_pressed"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerButtons/ButtonLeftClick" to="UIMainPanel" method="_on_button_left_click_pressed"]
-[connection signal="pressed" from="UIMainPanel/MarginContainer/Control/HBoxContainerButtons/ButtonRightClick" to="UIMainPanel" method="_on_button_right_click_pressed"]
-[connection signal="pressed" from="UIMainPanel/UIPanelConfig/ButtonClose" to="UIMainPanel" method="_on_button_close_config_pressed"]
-[connection signal="pressed" from="UIMainPanel/UIPanelConfig/ControlContainer/ButtonConnect" to="UIMainPanel" method="_on_button_connect_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerHeader/ButtonConfig" to="UIMainPanel" method="_open_config_panel"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonBackwards" to="UIMainPanel" method="_on_button_backwards_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonPlayPause" to="UIMainPanel" method="_on_button_play_pause_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonForward" to="UIMainPanel" method="_on_button_forward_pressed"]
+[connection signal="button_down" from="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_down"]
+[connection signal="button_up" from="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
+[connection signal="focus_exited" from="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
+[connection signal="mouse_exited" from="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_panel_touch_pad_button_up"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad" to="UIMainPanel" method="_on_button_left_click_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerButtons/ButtonLeftClick" to="UIMainPanel" method="_on_button_left_click_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerButtons/ButtonRightClick" to="UIMainPanel" method="_on_button_right_click_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/UIPanelConfig/ButtonClose" to="UIMainPanel" method="_on_button_close_config_pressed"]
+[connection signal="text_changed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LineEditHost" to="UIMainPanel" method="_on_modify_config_value"]
+[connection signal="text_changed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LineEditPort" to="UIMainPanel" method="_on_modify_config_value"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/ButtonConnect" to="UIMainPanel" method="_on_button_connect_pressed"]
+[connection signal="text_changed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/OptionsContainer/Title/LineEditCursorSpeed" to="UIMainPanel" method="_on_modify_config_value"]
 [connection signal="on_update_connection_status" from="Client" to="UIMainPanel" method="_on_update_connection_status"]

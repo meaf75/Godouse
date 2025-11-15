@@ -18,6 +18,8 @@ android/build/*
 # gdextensions
 bin/*
 !bin/godouse.gdextension
+!bin/godouse_rust.gdextension
+godouse-rust-gdextensions/target/
 
 # custom
 *~

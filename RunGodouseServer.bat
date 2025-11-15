@@ -1,1 +1,1 @@
-Godot_v4.2-stable_win64.exe -Path "%cd%" --headless
+start /min Godot_v4.3-stable_win64.exe --rendering-driver opengl3 -Path "%cd% --headless" --headless

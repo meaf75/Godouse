@@ -8,24 +8,35 @@ client (Android), server (windows)
 
 ![tray](./.github/assets/tray.png)
 
-# Master submodule command
+# Development 
+
+## Master submodule command
 
 	git submodule update --init --recursive
 
-# Building gdextensions
 
-This repository contains some useful task defined at [Makefile](Makefile) and [.vscode/tasks.json](.vscode/tasks.json)
+## Create an android debug keystore
 
-## Android
-Just follow this:
-https://docs.godotengine.org/en/4.2/tutorials/export/exporting_for_android.html
+	mkdir -p /home/<your_user_name>/.local/share/godot/keystores && \
+		keytool -genkeypair -alias androiddebugkey -keyalg RSA -keysize 2048 \
+		-validity 10000 \
+		-keystore /home/<your_user_name>/.local/share/godot/keystores/debug.keystore \
+		-storepass android \
+		-keypass android \
+		-dname "CN=Android Debug,O=Android,C=US"
 
-- [godouse-cpp-gdextensions/traypp](./godouse-cpp-gdextensions/traypp) is not included during the build process, a CPPDEFINES preprocessor named "\_\_EXCLUDE_TRAY_SYSTEM\_\_" is added in the scons build for android to not include that cpp part because it builds correctly but does not work on the device 🤷
 
-## Windows
-- Just follow this: https://docs.godotengine.org/en/stable/contributing/development/compiling/compiling_for_windows.html
-- Have the Shell32.lib (it comes with the visual studio c++ installation)
-- Have the User32.lib (it comes with the visual studio c++ installation)
+## Building gdextensions
+
+### Android
+
+Setup env variables for android gdextensions builds (`CLANG_PATH`, `CARGO_TARGET_{shoutTargetTriple}_LINKER`)
+
+https://godot-rust.github.io/book/toolchain/export-android.html
+
+### building
+
+use the tasks at [.vscode/tasks.json](./.vscode/tasks.json) or [godouse-rust-gdextensions/.vscode/tasks.json](godouse-rust-gdextensions/.vscode/tasks.json) for building the gdextensions for godot
 
 # Features
 - Platforms: [windows,android]
