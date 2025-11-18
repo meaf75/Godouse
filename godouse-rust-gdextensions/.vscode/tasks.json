@@ -2,15 +2,27 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Build gdextensions linux",
+			"label": "build:release:linux",
 			"type": "shell",
 			"command": "cargo build --target x86_64-unknown-linux-gnu --release",
 			"problemMatcher": []
 		},
 		{
-			"label": "Build gdextensions android:x86_64",
+			"label": "build:debug:linux",
+			"type": "shell",
+			"command": "cargo build --target x86_64-unknown-linux-gnu",
+			"problemMatcher": []
+		},
+		{
+			"label": "build:release:android:x86_64",
 			"type": "shell",
 			"command": "cargo build --target x86_64-linux-android --release",
+			"problemMatcher": []
+		},
+		{
+			"label": "build:release:android:aarch64",
+			"type": "shell",
+			"command": "cargo build --target aarch64-linux-android --release",
 			"problemMatcher": []
 		}
 	]

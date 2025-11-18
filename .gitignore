@@ -27,3 +27,4 @@ godouse-rust-gdextensions/target/
 Godouse.apk.idsig
 
 *.apk
+*.log

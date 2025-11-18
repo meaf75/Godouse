@@ -2,6 +2,8 @@ extends Node
 
 class_name GServer
 
+@export var panel_client_connected : Panel
+
 var server : TCPServer
 var clients : Array[StreamPeerTCP] = []
 var clients_disconnected : Array[StreamPeerTCP] = []
@@ -31,6 +33,7 @@ func _process(_delta):
 	if server.is_connection_available():
 		print("new client connected")
 		clients.append(server.take_connection())
+		panel_client_connected.visible = true
 
 	for c in clients:
 		c.poll()
@@ -51,6 +54,7 @@ func _process(_delta):
 		for c in clients_disconnected:
 			clients.erase(c)
 			print("Client disconnected")
+			panel_client_connected.visible = false
 
 		clients_disconnected.clear()
 

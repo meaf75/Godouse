@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b7pop0kujhfu1"]
+[gd_scene load_steps=15 format=3 uid="uid://b7pop0kujhfu1"]
 
 [ext_resource type="Script" uid="uid://ba2e6rto2wglc" path="res://scripts/GMaster.gd" id="1_1sjy8"]
 [ext_resource type="Script" uid="uid://deolmhkst5vs0" path="res://scripts/GUIMainPanel.gd" id="2_d7m8l"]
@@ -38,10 +38,15 @@ _data = {
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6w1g4"]
 bg_color = Color(0, 0, 0, 0.823529)
 
-[node name="Main" type="Node" node_paths=PackedStringArray("label_simulation_action")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kek77"]
+bg_color = Color(0, 0, 0, 0.78431374)
+
+[node name="Main" type="Node" node_paths=PackedStringArray("label_simulation_action", "texture_cursor_simulator", "tray")]
 process_mode = 3
 script = ExtResource("1_1sjy8")
 label_simulation_action = NodePath("UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction")
+texture_cursor_simulator = NodePath("UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator")
+tray = NodePath("GodouseTray")
 
 [node name="UIMainPanel" type="CanvasLayer" parent="." node_paths=PackedStringArray("texture_cursor_simulator", "label_simulation_action", "label_simulation_action_animator", "label_status", "panel_config", "config_label_status", "config_label_result", "input_host", "input_port", "input_cursor_speed")]
 script = ExtResource("2_d7m8l")
@@ -421,8 +426,32 @@ grow_vertical = 2
 placeholder_text = "Cursor speed"
 virtual_keyboard_type = 3
 
-[node name="Server" type="Node" parent="."]
+[node name="PanelClientConnected" type="Panel" parent="UIMainPanel/SafeArea"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kek77")
+
+[node name="Label" type="Label" parent="UIMainPanel/SafeArea/PanelClientConnected"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 41
+text = "Client 
+connected"
+horizontal_alignment = 1
+
+[node name="Server" type="Node" parent="." node_paths=PackedStringArray("panel_client_connected")]
 script = ExtResource("3_81mp0")
+panel_client_connected = NodePath("../UIMainPanel/SafeArea/PanelClientConnected")
 
 [node name="Client" type="Node" parent="."]
 script = ExtResource("4_ye5hg")
@@ -430,6 +459,8 @@ script = ExtResource("4_ye5hg")
 [node name="Camera2D" type="Camera2D" parent="."]
 visible = false
 position = Vector2(184, 323)
+
+[node name="GodouseTray" type="GodouseTray" parent="."]
 
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerHeader/ButtonConfig" to="UIMainPanel" method="_open_config_panel"]
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonBackwards" to="UIMainPanel" method="_on_button_backwards_pressed"]

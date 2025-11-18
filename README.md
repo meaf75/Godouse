@@ -8,6 +8,14 @@ client (Android), server (windows)
 
 ![tray](./.github/assets/tray.png)
 
+# Running as background
+
+## Linux
+
+Copy the [Godouse.desktop](./Godouse.desktop) to `~/.config/autostart/godouse.desktop`, update the property `Exec` by the path to this godot project  (paths with spaces must be scaped with doble \\ \\)
+
+	cp ./Godouse.desktop ~/.config/autostart/Godouse.desktop
+
 # Development 
 
 ## Master submodule command
@@ -34,9 +42,9 @@ Setup env variables for android gdextensions builds (`CLANG_PATH`, `CARGO_TARGET
 
 https://godot-rust.github.io/book/toolchain/export-android.html
 
-### building
+### Building
 
-use the tasks at [.vscode/tasks.json](./.vscode/tasks.json) or [godouse-rust-gdextensions/.vscode/tasks.json](godouse-rust-gdextensions/.vscode/tasks.json) for building the gdextensions for godot
+use the tasks at [godouse-rust-gdextensions/.vscode/tasks.json](godouse-rust-gdextensions/.vscode/tasks.json) for building the gdextensions for godot
 
 # Features
 - Platforms: [windows,android]
@@ -49,23 +57,3 @@ use the tasks at [.vscode/tasks.json](./.vscode/tasks.json) or [godouse-rust-gde
 - Add the application to the system tray, https://github.com/jmariner/traypp
 - Support to other platforms
 - Cursor sensibility
-
-# Third party
-
-## XInputSimulator
-
-- Upstream: https://github.com/pythoneer/XInputSimulator
-- XInputSimulator folder without root content
-- commit 19d5be6dfc4cda837f2395713fdd6475ace32314
-- location: godouse-cpp-gdextensions\XInputSimulator
-
-
-## traypp
-
-- Upstream: https://github.com/jmariner/traypp
-- commit f876fdf6d2ac283f7a85fce14e3e3d538c0abbe6
-- location: godouse-cpp-gdextensions\traypp
-
-# Useful stuff
-- Construction variables: https://scons.org/doc/0.96.90/HTML/scons-user/a3061.html
-- CXX (CMAKE) location: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe

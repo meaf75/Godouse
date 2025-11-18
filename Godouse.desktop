@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=bash -c "/mnt/Proyectos/Godot\\ projects/Godouse/run_godouse_server.sh"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=10
+Name=Godouse
+Comment=Starts the godouse server

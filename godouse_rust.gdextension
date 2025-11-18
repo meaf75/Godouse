@@ -5,7 +5,7 @@ compatibility_minimum = 4.5
 reloadable = true
 
 [libraries]
-linux.debug.x86_64 = "res://godouse-rust-gdextensions/target/x86_64-unknown-linux-gnu/release/libgodouse_rust_gdextensions.so"
+linux.debug.x86_64 = "res://godouse-rust-gdextensions/target/x86_64-unknown-linux-gnu/debug/libgodouse_rust_gdextensions.so"
 linux.release.x86_64 = "res://godouse-rust-gdextensions/target/x86_64-unknown-linux-gnu/release/libgodouse_rust_gdextensions.so"
 windows.debug.x86_64 = "res://bin/godouse.windows.template_debug.x86_64.dll"
 windows.release.x86_64 = "res://bin/godouse.windows.template_release.x86_64.dll"

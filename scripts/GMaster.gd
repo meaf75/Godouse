@@ -9,6 +9,8 @@ class_name GMaster
 @export var label_simulation_action : Label
 @export var texture_cursor_simulator : TextureRect
 
+@export var tray : GodouseTray
+
 var new_pos : Vector2
 
 var moving_cursor = false
@@ -18,13 +20,9 @@ var server : GServer
 var client : GClient
 var ui_panel : GUIMainPanel
 
-var thread : Thread
-
 var is_running_in_editor = OS.has_feature("editor")
 var is_running_in_mobile : bool = OS.get_name() == "Android"
 
-
-#var _tray : GXTraypp
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,15 +38,14 @@ func _ready():
 
 	if !is_running_in_mobile || initialize_server:
 		server.initialize(self)
-
-		thread = Thread.new()
-		#thread.start(_start_system_tray.bind($GXTraypp))
-		#$GXTraypp.on_receive_exit_request.connect(exit_game)
+		_start_system_tray()
+		get_window().close_requested.connect(_close_requested)
 
 	if is_running_in_mobile || initialize_client:
 		print("running mobile initialization")
 		ui_panel.initialize(client)
 		client.initialize()
+
 
 func _input(ev):
 	if ev is InputEventKey and ev.keycode == KEY_SPACE and ev.pressed:
@@ -70,19 +67,19 @@ func _input(ev):
 			KEY_E:
 				client.send_press_mouse_button(GodouseInputConstants.MOUSE_BUTTON_RIGHT_CLICK)
 
+
 func _on_receive_move_request(offset: Vector2):
 	texture_cursor_simulator.set_position(texture_cursor_simulator.position + offset * move_multiplier)
 
-#func _start_system_tray(tray: GXTraypp):
-	#_tray = tray
-	#var icon_path = ProjectSettings.globalize_path("res://images/icon.ico")
-	#print("Starting system tray, icon: ", icon_path)
-#
-	#_tray.add_to_system_tray("Godouse", icon_path)
 
-func _exit_tree():
-	#_tray.stop_system_tray()
-	thread.wait_to_finish()
+func _start_system_tray():
+	var icon_path = ProjectSettings.globalize_path("res://images/icon.ico")
+	print("Starting system tray, icon: ", icon_path)
 
-func exit_game():
-	get_tree().quit()
+	tray.start(icon_path)
+	tray.set_process(true)
+	tray.on_receive_close_request.connect(get_tree().quit)
+
+
+func _close_requested():
+	tray.terminate_tray()

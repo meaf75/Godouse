@@ -8,10 +8,12 @@ crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 
 [dependencies]
 enigo = "0.6.1"
-godot = {version = "0.4.2", features = ["register-docs"]}
+godot = {version = "0.4.2", features = ["register-docs", "experimental-threads"]}
 
 [target.'cfg(target_os = "linux")'.dependencies]
 device_query = "4.0.1"
+png = "0.18.0"
+tray-item = { version = "0.10.0", features = ["ksni"] }
 
 [features]
 linux = []
