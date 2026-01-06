@@ -33,7 +33,9 @@ func _process(_delta):
 	if server.is_connection_available():
 		print("new client connected")
 		clients.append(server.take_connection())
-		panel_client_connected.visible = true
+
+		if not _master.initialize_server and not _master.initialize_client: # enable if is not dev testing
+			panel_client_connected.visible = true
 
 	for c in clients:
 		c.poll()
@@ -88,12 +90,36 @@ func handle_action(action: Dictionary):
 			print("sending: ", action["button"])
 			godouse_input.simulate_button(action["button"])
 			pass
+
 		GConstants.TCP_MESSAGE_TYPE_VIRTUAL_KEY:
 			#GXInput.simulate_virtual_key_click(action["button"])
 			pass
+
 		GConstants.TCP_MESSAGE_TYPE_CURSOR_SPEED:
 			if action["speed"] is int:
 				GConfig.cursor_speed = action["speed"]
 				print("updating cursor speed to %d" % GConfig.cursor_speed)
+
+		GConstants.TCP_MESSAGE_TYPE_POWER_ACTION:
+			run_power_action(action["value"])
+
 		_:
 			push_warning("unknown type received: ", action["type"])
+
+
+func run_power_action(power_option: int):
+
+	var cmd = "powershell.exe"
+	var args = ["echo", "\"to implement\""]
+
+	if power_option == GConstants.POWER_OPTION_SLEEP:
+		if OS.get_name() == "Linux":
+			cmd = "systemctl"
+			args = ["suspend", "-i"]
+
+	if power_option == GConstants.POWER_OPTION_SHUTDOWN:
+		if OS.get_name() == "Linux":
+			cmd = "systemctl"
+			args = ["poweroff", "-i"]
+
+	OS.execute(cmd, args)

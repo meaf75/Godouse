@@ -97,3 +97,10 @@ func send_cursor_speed(speed: int):
 		type = GConstants.TCP_MESSAGE_TYPE_CURSOR_SPEED,
 		speed = speed
 	})
+
+
+func send_power_action(power_option: int):
+	client.put_var({
+		type = GConstants.TCP_MESSAGE_TYPE_POWER_ACTION,
+		value = power_option
+	})

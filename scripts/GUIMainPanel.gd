@@ -8,6 +8,8 @@ class_name GUIMainPanel
 
 @export var label_status : RichTextLabel
 
+@export var ui_power_options: UIPowerOptions
+
 @export_category("Panel Config")
 @export var panel_config : Panel
 @export var config_label_status : RichTextLabel
@@ -15,6 +17,8 @@ class_name GUIMainPanel
 @export var input_host : LineEdit
 @export var input_port : LineEdit
 @export var input_cursor_speed : LineEdit
+
+
 
 var _client: GClient
 var is_running_in_editor = false
@@ -153,3 +157,12 @@ func _on_modify_config_value(_v : String):
 	GConfig.port = input_port.text.to_int()
 	GConfig.cursor_speed = input_cursor_speed.text.to_int()
 	GConfig.save()
+
+
+# Power screen
+func _on_power_button_pressed() -> void:
+	ui_power_options.visible = true
+
+
+func _on_ui_power_options_confirmed_option(power_option: int) -> void:
+	_client.send_power_action(power_option)

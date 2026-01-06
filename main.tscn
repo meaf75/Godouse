@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7pop0kujhfu1"]
+[gd_scene load_steps=17 format=3 uid="uid://b7pop0kujhfu1"]
 
 [ext_resource type="Script" uid="uid://ba2e6rto2wglc" path="res://scripts/GMaster.gd" id="1_1sjy8"]
 [ext_resource type="Script" uid="uid://deolmhkst5vs0" path="res://scripts/GUIMainPanel.gd" id="2_d7m8l"]
@@ -6,9 +6,11 @@
 [ext_resource type="Script" uid="uid://d2yxw3kimnuu7" path="res://scripts/GServer.gd" id="3_81mp0"]
 [ext_resource type="Script" uid="uid://cpde4t5o1disk" path="res://scripts/safe_area.gd" id="3_kek77"]
 [ext_resource type="Texture2D" uid="uid://cr04cp7p2vhia" path="res://images/fast-backward-button.png" id="3_xf2u2"]
+[ext_resource type="Texture2D" uid="uid://dq4upgh2l7ksb" path="res://images/power-button.png" id="4_efxa6"]
 [ext_resource type="Texture2D" uid="uid://cwsllqbc0wtxu" path="res://images/pause-play.png" id="4_trjos"]
 [ext_resource type="Script" uid="uid://dj8nungafkpgn" path="res://scripts/GClient.gd" id="4_ye5hg"]
 [ext_resource type="Texture2D" uid="uid://7kylbsqdfhld" path="res://images/fast-forward-button.png" id="5_3b8wx"]
+[ext_resource type="Script" uid="uid://kg0wxt8lbsj2" path="res://ui_power_options.gd" id="9_dg77c"]
 
 [sub_resource type="Animation" id="Animation_242bi"]
 length = 0.001
@@ -48,12 +50,13 @@ label_simulation_action = NodePath("UIMainPanel/SafeArea/MarginContainer/Control
 texture_cursor_simulator = NodePath("UIMainPanel/SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator")
 tray = NodePath("GodouseTray")
 
-[node name="UIMainPanel" type="CanvasLayer" parent="." node_paths=PackedStringArray("texture_cursor_simulator", "label_simulation_action", "label_simulation_action_animator", "label_status", "panel_config", "config_label_status", "config_label_result", "input_host", "input_port", "input_cursor_speed")]
+[node name="UIMainPanel" type="CanvasLayer" parent="." node_paths=PackedStringArray("texture_cursor_simulator", "label_simulation_action", "label_simulation_action_animator", "label_status", "ui_power_options", "panel_config", "config_label_status", "config_label_result", "input_host", "input_port", "input_cursor_speed")]
 script = ExtResource("2_d7m8l")
 texture_cursor_simulator = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator")
 label_simulation_action = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction")
 label_simulation_action_animator = NodePath("SafeArea/MarginContainer/Control/PanelTouchPad/TextureRectCursorSimulator/LabelSimulationAction/AnimationPlayer")
 label_status = NodePath("SafeArea/MarginContainer/Control/HBoxContainerHeader/RichTextLabelStatus")
+ui_power_options = NodePath("SafeArea/UIPowerOptions")
 panel_config = NodePath("SafeArea/UIPanelConfig")
 config_label_status = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/RichTextLabelStatus")
 config_label_result = NodePath("SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LabelResult")
@@ -100,6 +103,18 @@ theme_override_font_sizes/font_size = 26
 text = " Open config "
 
 [node name="HSeparator2" type="HSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
+layout_mode = 2
+alignment = 2
+
+[node name="PowerButton" type="Button" parent="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_efxa6")
+
+[node name="HSeparator4" type="HSeparator" parent="UIMainPanel/SafeArea/MarginContainer/Control"]
 layout_mode = 2
 theme_override_constants/separation = 30
 
@@ -426,6 +441,81 @@ grow_vertical = 2
 placeholder_text = "Cursor speed"
 virtual_keyboard_type = 3
 
+[node name="UIPowerOptions" type="Panel" parent="UIMainPanel/SafeArea" node_paths=PackedStringArray("confirm_panel")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_6w1g4")
+script = ExtResource("9_dg77c")
+confirm_panel = NodePath("VBoxContainer/ConfirmationDialog")
+
+[node name="ButtonClose" type="Button" parent="UIMainPanel/SafeArea/UIPowerOptions"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -73.0
+offset_top = 20.0
+offset_right = -23.0
+offset_bottom = 51.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 25
+text = " Close "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMainPanel/SafeArea/UIPowerOptions"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.0
+offset_top = -55.0
+offset_right = 95.0
+offset_bottom = 63.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="ButtonSleep" type="Button" parent="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer"]
+layout_mode = 2
+text = "Sleep"
+
+[node name="HSeparator" type="HSeparator" parent="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 39
+
+[node name="ButtonShutdown" type="Button" parent="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer"]
+layout_mode = 2
+text = "Shutdown"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer"]
+oversampling_override = 1.0
+mode = 3
+initial_position = 1
+size = Vector2i(255, 100)
+ok_button_text = "yes, do it!"
+dialog_text = "Are you sure you want to sleep"
+
+[node name="Label" type="Label" parent="UIMainPanel/SafeArea/UIPowerOptions"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -129.0
+offset_right = 110.0
+offset_bottom = -82.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Shutdown"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PanelClientConnected" type="Panel" parent="UIMainPanel/SafeArea"]
 visible = false
 layout_mode = 2
@@ -463,6 +553,7 @@ position = Vector2(184, 323)
 [node name="GodouseTray" type="GodouseTray" parent="."]
 
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerHeader/ButtonConfig" to="UIMainPanel" method="_open_config_panel"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainer/PowerButton" to="UIMainPanel" method="_on_power_button_pressed"]
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonBackwards" to="UIMainPanel" method="_on_button_backwards_pressed"]
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonPlayPause" to="UIMainPanel" method="_on_button_play_pause_pressed"]
 [connection signal="pressed" from="UIMainPanel/SafeArea/MarginContainer/Control/HBoxContainerMediaButtons/ButtonForward" to="UIMainPanel" method="_on_button_forward_pressed"]
@@ -478,4 +569,10 @@ position = Vector2(184, 323)
 [connection signal="text_changed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/LineEditPort" to="UIMainPanel" method="_on_modify_config_value"]
 [connection signal="pressed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/ConnectionContainer/ButtonConnect" to="UIMainPanel" method="_on_button_connect_pressed"]
 [connection signal="text_changed" from="UIMainPanel/SafeArea/UIPanelConfig/ControlContainer/OptionsContainer/Title/LineEditCursorSpeed" to="UIMainPanel" method="_on_modify_config_value"]
+[connection signal="confirmed_option" from="UIMainPanel/SafeArea/UIPowerOptions" to="UIMainPanel" method="_on_ui_power_options_confirmed_option"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/UIPowerOptions/ButtonClose" to="UIMainPanel/SafeArea/UIPowerOptions" method="_on_button_close_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer/ButtonSleep" to="UIMainPanel/SafeArea/UIPowerOptions" method="_on_button_sleep_pressed"]
+[connection signal="pressed" from="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer/ButtonShutdown" to="UIMainPanel/SafeArea/UIPowerOptions" method="_on_button_shutdown_pressed"]
+[connection signal="canceled" from="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer/ConfirmationDialog" to="UIMainPanel/SafeArea/UIPowerOptions" method="window_selected_option" binds= [false]]
+[connection signal="confirmed" from="UIMainPanel/SafeArea/UIPowerOptions/VBoxContainer/ConfirmationDialog" to="UIMainPanel/SafeArea/UIPowerOptions" method="window_selected_option" binds= [true]]
 [connection signal="on_update_connection_status" from="Client" to="UIMainPanel" method="_on_update_connection_status"]
